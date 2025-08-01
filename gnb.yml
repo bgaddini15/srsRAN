@@ -1,0 +1,55 @@
+# This example configuration outlines how to configure the srsRAN Project gNB to create a single TDD cell
+# transmitting in band 78, with 20 MHz bandwidth and 30 kHz sub-carrier-spacing. A USRP B200 is configured
+# as the RF frontend using split 8. Note in this example an external clock source is not used, so the sync
+# is not defined and the default is used.
+
+cu_cp:
+  amf:
+    addr: 127.0.0.1
+    port: 38412
+    bind_addr: 127.0.0.1
+    supported_tracking_areas:
+      - tac: 1
+        plmn_list:
+          - plmn: "310014"
+            tai_slice_support_list:
+              - sst: 1
+
+ru_sdr:
+  device_driver: uhd
+  device_args: type=b200,num_recv_frames=64,num_send_frames=64
+  srate: 23.04
+  otw_format: sc12
+  tx_gain: 80
+  rx_gain: 40
+
+cell_cfg:
+  sector_id: 0
+  dl_arfcn: 375000
+  band: 3
+  channel_bandwidth_MHz: 10
+  common_scs: 15
+  nof_antennas_dl: 1
+  nof_antennas_ul: 1
+  plmn: "310014"
+  tac: 1
+  pci: 33
+  enabled: true
+  q_rx_lev_min: -70
+  q_qual_min: -20
+  pcg_p_nr_fr1: 23
+
+expert_execution:
+  threads:
+    upper_phy:
+      nof_dl_threads: 4
+
+log:
+  filename: /tmp/gnb.log
+  all_level: warning
+
+pcap:
+  mac_enable: false
+  mac_filename: /tmp/gnb_mac.pcap
+  ngap_enable: false
+  ngap_filename: /tmp/gnb_ngap.pcap
